@@ -16,7 +16,8 @@ export const products = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     name: varchar("name", { length: 255 }).notNull(),
-    price: integer("price").notNull(),
+    originalPrice: integer("original_price").notNull(),
+    discountedPrice: integer("price").notNull(),
     thumbnail: varchar("thumbnail", { length: 255 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -29,6 +30,8 @@ export const products = pgTable(
     nameIndex: index("product_name_idx").on(product.name),
   }),
 );
+
+export type Product = typeof products.$inferSelect;
 
 export const users = pgTable("user", {
   id: varchar("id", { length: 255 })

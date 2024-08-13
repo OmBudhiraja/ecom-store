@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  // @ts-expect-error - type mismatch
+
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
