@@ -1,6 +1,5 @@
 import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/server/api/products";
-import { type Product } from "~/server/db/schema";
 
 export default async function HomePage() {
   const products = await getProducts();

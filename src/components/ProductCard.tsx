@@ -2,9 +2,12 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useTransition } from "react";
+import toast from "react-hot-toast";
 import { BiLoaderAlt as SpinnerIcon } from "react-icons/bi";
 import { FaStar as StarIcon } from "react-icons/fa";
 import { FiShoppingCart as CartIcon } from "react-icons/fi";
+import { useCartStore } from "~/lib/cartStore";
+import { useUserStore } from "~/lib/userStore";
 import { addToCart } from "~/server/api/cart";
 import { type Product } from "~/server/db/schema";
 import { formatePriceForCurrency } from "~/utils/utils";
@@ -16,11 +19,39 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   const [isPending, startTransition] = useTransition();
   const [showCheckIcon, setShowCheckIcon] = useState(false);
+  const setCart = useCartStore((state) => state.setCart);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const user = useUserStore((state) => state.user);
 
   async function handleAddToCart() {
-    console.log("Add to cart", product);
+    if (!user) {
+      addItem(
+        {
+          name: product.name,
+          productId: product.id,
+          quantity: 1,
+          originalPrice: product.originalPrice,
+          discountedPrice: product.discountedPrice,
+          thumbnail: product.thumbnail,
+        },
+        true,
+      );
+      setShowCheckIcon(true);
+      setTimeout(() => setShowCheckIcon(false), 2000);
+
+      return;
+    }
+
     startTransition(async () => {
-      await addToCart(product.id, 1);
+      const res = await addToCart([{ productId: product.id, quantity: 1 }]);
+
+      if (!res.success || !res.cart) {
+        toast.error(res.message ?? "Something went wrong!");
+      } else {
+        setCart(res.cart);
+      }
+
       setShowCheckIcon(true);
       setTimeout(() => setShowCheckIcon(false), 2000);
     });
