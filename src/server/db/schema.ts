@@ -6,7 +6,6 @@ import {
   primaryKey,
   text,
   timestamp,
-  uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
@@ -14,7 +13,10 @@ import { type AdapterAccount } from "next-auth/adapters";
 export const products = pgTable(
   "product",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: varchar("id", { length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     name: varchar("name", { length: 255 }).notNull(),
     originalPrice: integer("original_price").notNull(),
     discountedPrice: integer("price").notNull(),
@@ -46,6 +48,24 @@ export const users = pgTable("user", {
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
 });
+
+export const cartItem = pgTable(
+  "cart_item",
+  {
+    userId: varchar("user_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    productId: varchar("product_id", { length: 255 })
+      .notNull()
+      .references(() => products.id),
+    quantity: integer("quantity").notNull(),
+  },
+  (t) => ({
+    compoundPKey: primaryKey({ columns: [t.userId, t.productId] }),
+  }),
+);
+
+export type CartItem = typeof cartItem.$inferSelect;
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
