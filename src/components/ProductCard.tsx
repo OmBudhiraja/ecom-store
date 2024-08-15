@@ -59,13 +59,15 @@ function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="flex w-[300px] flex-col gap-4 overflow-hidden rounded-lg shadow-xl">
-      <Image
-        src={product.thumbnail}
-        alt={product.name}
-        width={300}
-        height={300}
-        className="aspect-square object-contain"
-      />
+      <div className="relative flex h-[300px] items-center justify-center overflow-hidden">
+        <Image
+          src={product.thumbnail}
+          alt={product.name}
+          width={300}
+          height={300}
+          className="block h-auto max-h-full w-auto object-contain"
+        />
+      </div>
       <div className="flex flex-col gap-2.5 p-4">
         <h3 className="line-clamp-1 text-lg font-medium capitalize text-zinc-600">
           {product.name}

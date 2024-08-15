@@ -15,7 +15,13 @@ type CartStore = {
     },
     updateLocal?: boolean,
   ) => void;
+  remoteItem: (productId: string, updateLocal?: boolean) => void;
   hydrateFromLocalStoreage: () => void;
+  handleQuantityChange: (
+    productId: string,
+    quantity: number,
+    updateLocal?: boolean,
+  ) => void;
 };
 
 const localStorageKey = "user-cart";
@@ -51,6 +57,36 @@ export const useCartStore = create<CartStore>((set, get) => ({
       cart: updatedCart,
     });
   },
+  remoteItem: (productId, updateLocal = false) => {
+    const updatedCart = get().cart?.filter(
+      (item) => item.productId !== productId,
+    );
+
+    if (updateLocal) {
+      localStorage.setItem(localStorageKey, JSON.stringify(updatedCart));
+    }
+    set({
+      cart: updatedCart,
+    });
+  },
+
+  handleQuantityChange: (productId, quantity, updateLocal = false) => {
+    const updatedCart = get().cart?.map((item) => {
+      if (item.productId === productId) {
+        return { ...item, quantity };
+      }
+      return item;
+    });
+
+    if (updateLocal) {
+      localStorage.setItem(localStorageKey, JSON.stringify(updatedCart));
+    }
+
+    set({
+      cart: updatedCart,
+    });
+  },
+
   hydrateFromLocalStoreage: () => {
     try {
       const localCart = JSON.parse(

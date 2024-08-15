@@ -34,7 +34,7 @@ function CartSummarySection() {
   };
 
   return (
-    <div className="sticky top-24 h-fit w-80 shrink-0 rounded-lg border p-6 shadow-sm">
+    <div className="top-24 h-fit w-80 shrink-0 rounded-lg border p-6 shadow-sm md:sticky">
       <h2 className="text-xl font-medium">Cart Summary</h2>
       <div className="mt-10 flex flex-col gap-4">
         <div className="flex items-center justify-between">
