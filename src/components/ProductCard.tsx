@@ -1,11 +1,11 @@
 "use client";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { BiLoaderAlt as SpinnerIcon } from "react-icons/bi";
 import { FaStar as StarIcon } from "react-icons/fa";
 import { FiShoppingCart as CartIcon } from "react-icons/fi";
+import { LuShoppingBag as AddedCartIcon } from "react-icons/lu";
 import { useCartStore } from "~/lib/cartStore";
 import { useUserStore } from "~/lib/userStore";
 import { addToCart } from "~/server/api/cart";
@@ -18,7 +18,8 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const [isPending, startTransition] = useTransition();
-  const [showCheckIcon, setShowCheckIcon] = useState(false);
+  const [showTransition, setShowTransition] = useState(false);
+
   const setCart = useCartStore((state) => state.setCart);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -37,8 +38,10 @@ function ProductCard({ product }: ProductCardProps) {
         },
         true,
       );
-      setShowCheckIcon(true);
-      setTimeout(() => setShowCheckIcon(false), 2000);
+      toast.success("Added to cart");
+
+      setShowTransition(true);
+      setTimeout(() => setShowTransition(false), 1500);
 
       return;
     }
@@ -52,8 +55,10 @@ function ProductCard({ product }: ProductCardProps) {
         setCart(res.cart);
       }
 
-      setShowCheckIcon(true);
-      setTimeout(() => setShowCheckIcon(false), 2000);
+      toast.success("Added to cart");
+
+      setShowTransition(true);
+      setTimeout(() => setShowTransition(false), 1500);
     });
   }
 
@@ -91,15 +96,19 @@ function ProductCard({ product }: ProductCardProps) {
         </div>
         <button
           onClick={handleAddToCart}
-          disabled={isPending || showCheckIcon}
+          disabled={isPending || showTransition}
           className="focus-visible:ring-ring text- relative mt-3 w-full rounded-md bg-zinc-900 px-4 py-3 font-medium text-white outline-none transition-colors hover:bg-zinc-900/90 focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-90"
         >
           <div
             style={{ visibility: isPending ? "hidden" : "visible" }}
-            className="flex w-full items-center justify-center gap-4"
+            className="flex w-full items-center justify-center gap-2"
           >
-            {showCheckIcon ? <AnimatingCheckIcon /> : <CartIcon size={18} />}
-            {showCheckIcon ? "Added!" : "Add to cart"}
+            {showTransition ? (
+              <AddedCartIcon size={18} className="animate-scale" />
+            ) : (
+              <CartIcon size={18} />
+            )}
+            {showTransition ? "Added to cart" : "Add to cart"}
           </div>
           {isPending && (
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -109,33 +118,6 @@ function ProductCard({ product }: ProductCardProps) {
         </button>
       </div>
     </div>
-  );
-}
-
-function AnimatingCheckIcon() {
-  return (
-    <svg
-      className="h-5 w-5 overflow-visible text-white"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-    >
-      <motion.path
-        initial={{ pathLength: 0.2, scale: 1 }}
-        animate={{ pathLength: 1, scale: 1.3 }}
-        pathLength={0}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        transition={{
-          delay: 0.2,
-          type: "tween",
-          ease: "easeOut",
-          duration: 0.3,
-        }}
-        d="M5 13l4 4L19 7"
-      />
-    </svg>
   );
 }
 

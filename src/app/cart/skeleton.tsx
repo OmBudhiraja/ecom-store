@@ -2,7 +2,7 @@ function CartPageSkeleton() {
   return (
     <div className="relative m-auto flex max-w-screen-xl flex-col items-center justify-center gap-10 px-6 py-10 md:flex-row md:items-start md:gap-8 md:px-8 lg:gap-20 lg:px-10">
       <ul className="flex max-w-full flex-col gap-6 overflow-hidden">
-        {Array.from({ length: 3 }).map((_, index) => (
+        {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}
             className="flex w-[650px] max-w-full items-center justify-between gap-7 rounded-lg border p-4 shadow-sm md:p-2 lg:p-4"
@@ -27,7 +27,7 @@ function CartPageSkeleton() {
           </div>
         ))}
       </ul>
-      <div className="top-24 h-fit w-80 shrink-0 rounded-lg border p-6 shadow-sm md:sticky">
+      <div className="lg:[w-350px] top-24 h-fit w-[350px] shrink-0 rounded-lg border p-6 shadow-sm md:sticky md:w-80">
         <div className="mb-6 h-6 w-40 animate-pulse rounded bg-gray-200" />
         <div className="mt-10 flex flex-col gap-4">
           <div className="flex items-center justify-between">

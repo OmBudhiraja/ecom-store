@@ -4,8 +4,12 @@ import CartSummarySection from "~/components/CartSummarySection";
 import { useCartStore } from "~/lib/cartStore";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CartPageSkeleton from "./skeleton";
+import { useUserStore } from "~/lib/userStore";
+import { removeFromCart } from "~/server/api/cart";
 
 export default function CartPage() {
+  const user = useUserStore((state) => state.user);
+
   const cart = useCartStore((state) => state.cart);
   const removeItem = useCartStore((state) => state.remoteItem);
   const changeQuantity = useCartStore((state) => state.handleQuantityChange);
@@ -16,8 +20,14 @@ export default function CartPage() {
     changeQuantity(productId, quantity);
   }
 
-  function handleRemoveProduct(productId: string) {
+  async function handleRemoveProduct(productId: string) {
+    if (!user) {
+      removeItem(productId, true);
+      return;
+    }
+
     removeItem(productId);
+    await removeFromCart(productId);
   }
 
   if (!cart) {

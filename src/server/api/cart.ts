@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, sql } from "drizzle-orm";
+import { and, eq, getTableName, sql } from "drizzle-orm";
 import { getServerAuthSession } from "../auth";
 import { db } from "../db";
 import { cartItem, products } from "../db/schema";
@@ -10,7 +10,7 @@ export async function getCart() {
   const session = await getServerAuthSession();
 
   if (!session) {
-    return null;
+    return { message: "Unauthorized", success: false };
   }
 
   const cart = await db
@@ -26,13 +26,11 @@ export async function getCart() {
     .innerJoin(products, eq(cartItem.productId, products.id))
     .where(eq(cartItem.userId, session.user.id));
 
-  return cart;
+  return { success: true, cart };
 }
 
-export type UserCart = Awaited<ReturnType<typeof getCart>>;
-
 const addToCartSchema = z.array(
-  z.object({ productId: z.string(), quantity: z.number().min(1) }),
+  z.object({ productId: z.string(), quantity: z.number().min(1) }).strict(),
 );
 
 export async function addToCart(
@@ -60,7 +58,12 @@ export async function addToCart(
     )
     .onConflictDoUpdate({
       target: [cartItem.userId, cartItem.productId],
-      set: { quantity: sql.raw(`excluded.quantity`) },
+      //   set: { quantity: sql.raw(`excluded.quantity + 1`) },
+      set: {
+        quantity: sql.raw(
+          `${getTableName(cartItem)}.${cartItem.quantity.name} + excluded.quantity`,
+        ),
+      },
     });
 
   const updatedCart = await db
@@ -77,4 +80,60 @@ export async function addToCart(
     .where(eq(cartItem.userId, session.user.id));
 
   return { cart: updatedCart, success: true };
+}
+
+export async function removeFromCart(productId: string) {
+  if (!productId || typeof productId !== "string") {
+    return { message: "Invalid request body", success: false };
+  }
+
+  const session = await getServerAuthSession();
+
+  if (!session) {
+    return { message: "Unauthorized", success: false };
+  }
+
+  await db
+    .delete(cartItem)
+    .where(
+      and(
+        eq(cartItem.userId, session.user.id),
+        eq(cartItem.productId, productId),
+      ),
+    );
+
+  return { success: true };
+}
+
+const updateQuantitySchema = z
+  .object({
+    productId: z.string(),
+    quantity: z.number().min(1),
+  })
+  .strict();
+
+export async function updateQuantity(productId: string, quantity: number) {
+  const body = updateQuantitySchema.safeParse({ productId, quantity });
+
+  if (!body.success) {
+    return { message: "Invalid request body", success: false };
+  }
+
+  const session = await getServerAuthSession();
+
+  if (!session) {
+    return { message: "Unauthorized", success: false };
+  }
+
+  await db
+    .update(cartItem)
+    .set({ quantity })
+    .where(
+      and(
+        eq(cartItem.userId, session.user.id),
+        eq(cartItem.productId, productId),
+      ),
+    );
+
+  return { success: true };
 }

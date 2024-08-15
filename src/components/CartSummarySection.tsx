@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useCartStore } from "~/lib/cartStore";
 import { formatePriceForCurrency } from "~/utils/utils";
 import { RiDiscountPercentFill as CouponIcon } from "react-icons/ri";
+import { BsTruck as DeliveryIcon } from "react-icons/bs";
 
 function CartSummarySection() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,7 +35,7 @@ function CartSummarySection() {
   };
 
   return (
-    <div className="top-24 h-fit w-80 shrink-0 rounded-lg border p-6 shadow-sm md:sticky">
+    <div className="top-24 h-fit w-[350px] shrink-0 rounded-lg border p-6 shadow-sm md:sticky md:w-80 lg:w-[350px]">
       <h2 className="text-xl font-medium">Cart Summary</h2>
       <div className="mt-10 flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -43,8 +44,26 @@ function CartSummarySection() {
         </div>
         <div className="flex items-center justify-between">
           <span>Discount</span>
-          <span>{formatePriceForCurrency(-discount)}</span>
+          <span className="text-green-500">
+            {formatePriceForCurrency(-discount)}
+          </span>
         </div>
+
+        {isCouponApplied && (
+          <div className="flex items-center justify-between">
+            <span>Coupon</span>
+            <span className="text-green-500">
+              {formatePriceForCurrency(-couponDiscount)}
+            </span>
+          </div>
+        )}
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-1.5">
+            Delivery <DeliveryIcon />
+          </span>
+          <span className="text-green-500">Free</span>
+        </div>
+
         {!isCouponApplied && (
           <form
             onSubmit={handleApplyCoupon}
@@ -64,12 +83,7 @@ function CartSummarySection() {
             </button>
           </form>
         )}
-        {isCouponApplied && (
-          <div className="flex items-center justify-between">
-            <span>Coupon</span>
-            <span>{formatePriceForCurrency(-couponDiscount)}</span>
-          </div>
-        )}
+
         {isCouponApplied && (
           <div className="flex items-center justify-between rounded-md border p-2">
             <div className="flex items-center gap-2">
@@ -92,11 +106,12 @@ function CartSummarySection() {
             </button>
           </div>
         )}
-        <div className="mt-1 flex items-center justify-between text-xl font-semibold">
-          <span>Grand Total</span>
+        <hr />
+        <div className="flex items-center justify-between text-xl font-medium">
+          <span>Total Amount</span>
           <span>{formatePriceForCurrency(finalTotal)}</span>
         </div>
-        <button className="mt-4 flex w-full items-center justify-center rounded-md bg-zinc-900 px-3 py-2.5 text-white">
+        <button className="mt-2 flex w-full items-center justify-center rounded-md bg-zinc-900 px-3 py-2.5 text-white">
           Proceed to checkout
         </button>
       </div>

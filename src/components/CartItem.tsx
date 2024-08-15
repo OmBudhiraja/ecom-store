@@ -19,7 +19,7 @@ function CartItem({
   return (
     <div className="flex w-[650px] max-w-full items-center justify-between gap-7 rounded-lg border p-4 shadow-sm md:p-2 lg:p-4">
       <div className="flex items-center gap-3.5">
-        <div className="h-[100px] w-[100px] shrink-0 rounded-md bg-gray-200">
+        <div className="h-[100px] w-[100px] shrink-0 rounded-md">
           <Image
             src={cartItem.thumbnail}
             alt={cartItem.name}

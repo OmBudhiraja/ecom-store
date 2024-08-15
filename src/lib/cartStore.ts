@@ -36,7 +36,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
   addItem: (item, updateLocal = false) => {
     const existingItemIdx = get().cart?.findIndex(
-      (item) => item.productId === item.productId,
+      (p) => p.productId === item.productId,
     );
 
     const updatedCart = [...(get().cart ?? [])];
