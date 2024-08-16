@@ -1,9 +1,10 @@
 import { create } from "zustand";
+import { addToCart } from "~/server/api/cart";
 import { type Cart } from "~/types";
 
 type CartStore = {
   cart: Cart | null;
-  setCart: (items: Cart, updateLocal?: boolean) => void;
+  initCart: (items: Cart) => void;
   addItem: (
     item: {
       productId: string;
@@ -28,10 +29,35 @@ const localStorageKey = "user-cart";
 
 export const useCartStore = create<CartStore>((set, get) => ({
   cart: null,
-  setCart: (items, updateLocal = false) => {
-    if (updateLocal) {
-      localStorage.setItem(localStorageKey, JSON.stringify(items));
+  initCart: (items) => {
+    // init has already been called
+    const existingCart = get().cart;
+    if (existingCart && existingCart.length > 0) {
+      return;
     }
+
+    // check if there are items in local storage and merge them with server items
+    try {
+      const localCart = JSON.parse(
+        localStorage.getItem(localStorageKey) ?? "[]",
+      ) as Cart;
+      if (localCart.length > 0) {
+        void addToCart(
+          localCart.map((i) => ({
+            productId: i.productId,
+            quantity: i.quantity,
+          })),
+        );
+
+        const merged = mergeCartProducts([...localCart, ...items]);
+        localStorage.removeItem(localStorageKey);
+        set({ cart: merged });
+        return;
+      }
+    } catch (err) {
+      console.log("Error reading from local storage", err);
+    }
+
     set({ cart: items });
   },
   addItem: (item, updateLocal = false) => {
@@ -98,3 +124,30 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }
   },
 }));
+
+// merges the same products in the cart
+function mergeCartProducts(items: Cart) {
+  // items might have duplicate products
+  const updatedCart = items.reduce((acc, item) => {
+    const existingItemIdx = acc.findIndex(
+      (p) => p.productId === item.productId,
+    );
+
+    if (existingItemIdx === -1 || existingItemIdx === undefined) {
+      acc.push(item);
+    } else {
+      const currentQuantity =
+        acc[existingItemIdx]!.quantity < 1 ? 1 : acc[existingItemIdx]!.quantity;
+      const newQuantity = item.quantity < 1 ? 1 : item.quantity;
+
+      acc[existingItemIdx] = {
+        ...acc[existingItemIdx]!,
+        quantity: currentQuantity + newQuantity,
+      };
+    }
+
+    return acc;
+  }, [] as Cart);
+
+  return updatedCart;
+}

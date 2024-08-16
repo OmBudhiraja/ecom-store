@@ -61,7 +61,11 @@ async function UserInfo() {
     );
   }
 
-  return <div></div>;
+  return (
+    <div>
+      <Link href="/api/auth/signout">Logout</Link>
+    </div>
+  );
 }
 
 async function CartLink({ user }: { user: Session["user"] | null }) {

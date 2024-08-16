@@ -64,7 +64,6 @@ export async function addToCart(
       )
       .onConflictDoUpdate({
         target: [cartItem.userId, cartItem.productId],
-        //   set: { quantity: sql.raw(`excluded.quantity + 1`) },
         set: {
           quantity: sql.raw(
             `${getTableName(cartItem)}.${cartItem.quantity.name} + excluded.quantity`,

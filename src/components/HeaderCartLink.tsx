@@ -15,7 +15,7 @@ function HeaderCartLink({
   user: Session["user"] | null;
 }) {
   const cart = useCartStore((state) => state.cart);
-  const setCart = useCartStore((state) => state.setCart);
+  const initCart = useCartStore((state) => state.initCart);
   const hydrateFromLocalStoreage = useCartStore(
     (state) => state.hydrateFromLocalStoreage,
   );
@@ -26,8 +26,8 @@ function HeaderCartLink({
       return;
     }
 
-    setCart(initialCart ?? []);
-  }, [initialCart, setCart, user, hydrateFromLocalStoreage]);
+    initCart(initialCart ?? []);
+  }, [initialCart, initCart, user, hydrateFromLocalStoreage]);
 
   return (
     <Link href="/cart" className="relative px-2 py-1">
