@@ -7,6 +7,7 @@ import { FiShoppingCart as CartIcon } from "react-icons/fi";
 import { getCart } from "~/server/api/cart";
 import { type Session } from "next-auth";
 import HeaderCartLink from "./HeaderCartLink";
+import UserInfo from "./UserInfo";
 
 function Header({ user }: { user: Session["user"] | null }) {
   return (
@@ -29,7 +30,7 @@ function Header({ user }: { user: Session["user"] | null }) {
         </div>
         <div className="flex items-center gap-4">
           <Suspense fallback={<div>Loading..</div>}>
-            <UserInfo />
+            <UserInfoContainer />
           </Suspense>
           <Suspense
             fallback={
@@ -47,7 +48,7 @@ function Header({ user }: { user: Session["user"] | null }) {
   );
 }
 
-async function UserInfo() {
+async function UserInfoContainer() {
   const session = await getServerAuthSession();
 
   if (!session) {
@@ -61,11 +62,13 @@ async function UserInfo() {
     );
   }
 
-  return (
-    <div>
-      <Link href="/api/auth/signout">Logout</Link>
-    </div>
-  );
+  return <UserInfo user={session.user} />;
+
+  // return (
+  //   <div>
+  //     <Link href="/api/auth/signout">Logout</Link>
+  //   </div>
+  // );
 }
 
 async function CartLink({ user }: { user: Session["user"] | null }) {

@@ -3,6 +3,7 @@ import { useCartStore } from "~/lib/cartStore";
 import { formatePriceForCurrency } from "~/utils/utils";
 import { RiDiscountPercentFill as CouponIcon } from "react-icons/ri";
 import { BsTruck as DeliveryIcon } from "react-icons/bs";
+import toast from "react-hot-toast";
 
 function CartSummarySection() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +112,20 @@ function CartSummarySection() {
           <span>Total Amount</span>
           <span>{formatePriceForCurrency(finalTotal)}</span>
         </div>
-        <button className="mt-2 flex w-full items-center justify-center rounded-md bg-zinc-900 px-3 py-2.5 text-white">
+        <button
+          onClick={() => {
+            if (items.length === 0) {
+              return toast.error("Cart is empty!");
+            }
+
+            toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {
+              loading: "Processing order...",
+              success: "Order placed successfully!",
+              error: "Something went wrong!",
+            });
+          }}
+          className="mt-2 flex w-full items-center justify-center rounded-md bg-zinc-900 px-3 py-2.5 text-white"
+        >
           Proceed to checkout
         </button>
       </div>
