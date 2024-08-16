@@ -29,6 +29,7 @@ const localStorageKey = "user-cart";
 
 export const useCartStore = create<CartStore>((set, get) => ({
   cart: null,
+
   initCart: (items) => {
     // init has already been called
     const existingCart = get().cart;
@@ -42,6 +43,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
         localStorage.getItem(localStorageKey) ?? "[]",
       ) as Cart;
       if (localCart.length > 0) {
+        // server action to populate the cart in db
         void addToCart(
           localCart.map((i) => ({
             productId: i.productId,
@@ -60,6 +62,8 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
     set({ cart: items });
   },
+
+  // add item to cart, if product already exists, increment the quantity
   addItem: (item, updateLocal = false) => {
     const existingItemIdx = get().cart?.findIndex(
       (p) => p.productId === item.productId,
@@ -72,7 +76,10 @@ export const useCartStore = create<CartStore>((set, get) => ({
     } else {
       updatedCart[existingItemIdx] = {
         ...updatedCart[existingItemIdx]!,
-        quantity: updatedCart[existingItemIdx]!.quantity + item.quantity,
+        quantity: Math.max(
+          1,
+          updatedCart[existingItemIdx]!.quantity + item.quantity,
+        ),
       };
     }
 
@@ -83,6 +90,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
       cart: updatedCart,
     });
   },
+
   remoteItem: (productId, updateLocal = false) => {
     const updatedCart = get().cart?.filter(
       (item) => item.productId !== productId,
@@ -99,7 +107,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   handleQuantityChange: (productId, quantity, updateLocal = false) => {
     const updatedCart = get().cart?.map((item) => {
       if (item.productId === productId) {
-        return { ...item, quantity };
+        return { ...item, quantity: Math.max(1, quantity) };
       }
       return item;
     });

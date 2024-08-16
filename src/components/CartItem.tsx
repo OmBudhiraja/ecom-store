@@ -1,9 +1,8 @@
 import Image from "next/image";
+import { IoMdClose as RemoveIcon } from "react-icons/io";
+import { LuPlus as AddIcon, LuMinus as SubtractIcon } from "react-icons/lu";
 import { type Cart } from "~/types";
 import { formatePriceForCurrency } from "~/utils/utils";
-import { IoMdClose as RemoveIcon } from "react-icons/io";
-import { LuPlus as AddIcon } from "react-icons/lu";
-import { LuMinus as SubtractIcon } from "react-icons/lu";
 
 interface CartItemProps {
   cartItem: Cart[number];

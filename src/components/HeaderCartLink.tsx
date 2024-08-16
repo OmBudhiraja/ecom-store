@@ -1,18 +1,17 @@
 "use client";
 
-import { type Session } from "next-auth";
 import Link from "next/link";
 import { useEffect } from "react";
 import { FiShoppingCart as CartIcon } from "react-icons/fi";
 import { useCartStore } from "~/lib/cartStore";
-import { type Cart } from "~/types";
+import { type User, type Cart } from "~/types";
 
 function HeaderCartLink({
   cart: initialCart,
   user,
 }: {
   cart: Cart | null;
-  user: Session["user"] | null;
+  user: User | null;
 }) {
   const cart = useCartStore((state) => state.cart);
   const initCart = useCartStore((state) => state.initCart);

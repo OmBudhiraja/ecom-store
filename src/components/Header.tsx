@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { LuMountain } from "react-icons/lu";
-import { IoIosSearch as SearchIcon } from "react-icons/io";
-import { getServerAuthSession } from "~/server/auth";
 import { Suspense } from "react";
 import { FiShoppingCart as CartIcon } from "react-icons/fi";
+import { IoIosSearch as SearchIcon } from "react-icons/io";
+import { LuMountain } from "react-icons/lu";
 import { getCart } from "~/server/api/cart";
-import { type Session } from "next-auth";
+import { getServerAuthSession } from "~/server/auth";
 import HeaderCartLink from "./HeaderCartLink";
 import UserInfo from "./UserInfo";
+import { type User } from "~/types";
 
-function Header({ user }: { user: Session["user"] | null }) {
+function Header({ user }: { user: User | null }) {
   return (
     <header className="item-center sticky top-0 z-10 flex w-full justify-between border-b border-gray-300 bg-white px-6 py-4 md:px-8 lg:px-10">
       <div className="m-auto flex w-full max-w-screen-2xl items-center justify-between gap-5">
@@ -63,15 +63,9 @@ async function UserInfoContainer() {
   }
 
   return <UserInfo user={session.user} />;
-
-  // return (
-  //   <div>
-  //     <Link href="/api/auth/signout">Logout</Link>
-  //   </div>
-  // );
 }
 
-async function CartLink({ user }: { user: Session["user"] | null }) {
+async function CartLink({ user }: { user: User | null }) {
   const cartRes = await getCart();
 
   if (!cartRes.success) {

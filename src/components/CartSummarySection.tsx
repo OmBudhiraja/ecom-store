@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import { BsTruck as DeliveryIcon } from "react-icons/bs";
+import { RiDiscountPercentFill as CouponIcon } from "react-icons/ri";
 import { useCartStore } from "~/lib/cartStore";
 import { formatePriceForCurrency } from "~/utils/utils";
-import { RiDiscountPercentFill as CouponIcon } from "react-icons/ri";
-import { BsTruck as DeliveryIcon } from "react-icons/bs";
-import toast from "react-hot-toast";
 
 function CartSummarySection() {
   // eslint-disable-next-line react-hooks/exhaustive-deps

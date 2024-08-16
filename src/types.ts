@@ -1,3 +1,5 @@
+import { type Session } from "next-auth";
+
 export type Cart = {
   productId: string;
   quantity: number;
@@ -6,3 +8,5 @@ export type Cart = {
   discountedPrice: number;
   thumbnail: string;
 }[];
+
+export type User = Session["user"];

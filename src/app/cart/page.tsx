@@ -1,12 +1,16 @@
 "use client";
+
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import Link from "next/link";
 import CartItem from "~/components/CartItem";
 import CartSummarySection from "~/components/CartSummarySection";
 import { useCartStore } from "~/lib/cartStore";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import CartPageSkeleton from "./skeleton";
 import { useUserStore } from "~/lib/userStore";
-import { removeFromCart, updateQuantity } from "~/server/api/cart";
-import Link from "next/link";
+import {
+  removeFromCart as removeFromCartApi,
+  updateQuantity as updateQuantityApi,
+} from "~/server/api/cart";
+import CartPageSkeleton from "./skeleton";
 
 export default function CartPage() {
   const user = useUserStore((state) => state.user);
@@ -21,7 +25,7 @@ export default function CartPage() {
     changeQuantity(productId, quantity, !user);
 
     if (user) {
-      await updateQuantity(productId, quantity);
+      await updateQuantityApi(productId, quantity);
     }
   }
 
@@ -29,7 +33,7 @@ export default function CartPage() {
     removeItem(productId, !user);
 
     if (user) {
-      await removeFromCart(productId);
+      await removeFromCartApi(productId);
     }
   }
 

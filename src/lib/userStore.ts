@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { type Session } from "next-auth";
+import { type User } from "~/types";
 
 type UserStore = {
-  user: Session["user"] | null;
+  user: User | null;
   isLoading: boolean;
-  setUser: (userData: Session["user"] | null) => void;
+  setUser: (userData: User | null) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -12,6 +12,3 @@ export const useUserStore = create<UserStore>((set) => ({
   isLoading: true,
   setUser: (userData) => set({ user: userData, isLoading: false }),
 }));
-
-// server dispatcher
-import {} from "zustand/vanilla";

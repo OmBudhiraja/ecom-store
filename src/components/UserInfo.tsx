@@ -1,11 +1,10 @@
 "use client";
-import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { IoPersonSharp as AvatarIcon } from "react-icons/io5";
+import { type User } from "~/types";
 
-const UserInfo = ({ user }: { user: Session["user"] }) => {
+const UserInfo = ({ user }: { user: User }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>

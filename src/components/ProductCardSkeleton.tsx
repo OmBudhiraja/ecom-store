@@ -1,5 +1,3 @@
-import React from "react";
-
 function ProductCardSkeleton() {
   return (
     <div className="flex w-[300px] animate-pulse flex-col gap-4 overflow-hidden rounded-lg shadow-xl">
