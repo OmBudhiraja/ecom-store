@@ -18,7 +18,7 @@ function Header({ user }: { user: Session["user"] | null }) {
           className="flex shrink-0 items-center gap-2 text-lg font-bold"
         >
           <LuMountain size={24} />
-          <span className="hidden md:block">Ecom Store</span>
+          <span className="hidden md:block">Quik Shop</span>
         </Link>
         <div className="relative max-w-md flex-1">
           <SearchIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-500" />

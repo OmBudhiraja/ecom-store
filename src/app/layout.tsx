@@ -8,7 +8,7 @@ import UserProvider from "~/components/UserProvider";
 import { getServerAuthSession } from "~/server/auth";
 
 export const metadata: Metadata = {
-  title: "Ecom Store",
+  title: "Quik Shop",
   description: "A simple e-commerce store",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

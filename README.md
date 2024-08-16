@@ -1,29 +1,26 @@
-# Create T3 App
+# Quik Shop
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Deployed at: [https://quikshop.vercel.app](https://quikshop.vercel.app)
 
-## What's next? How do I make an app with this?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Setup Locally
+```bash
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+# Clone the repository
+git clone https://github.com/OmBudhiraja/quik-shop
+cd quik-shop
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+# set up the environment variables
+cp .env.example .env # fill out the required variables
 
-## Learn More
+# Install dependencies
+pnpm install
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+# Setup db
+pnpm run db:push
+pnpm run db:seed
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+# Start the server
+pnpm run dev
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```

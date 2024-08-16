@@ -118,6 +118,7 @@ function CartSummarySection() {
               return toast.error("Cart is empty!");
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {
               loading: "Processing order...",
               success: "Order placed successfully!",
