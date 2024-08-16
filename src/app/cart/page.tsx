@@ -42,7 +42,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="relative m-auto flex max-w-screen-xl flex-col items-center justify-center gap-10 px-6 py-10 md:flex-row md:items-start md:gap-8 md:px-8 lg:gap-20 lg:px-10">
+    <main className="relative m-auto flex max-w-screen-xl flex-col items-center justify-center gap-10 px-4 py-10 md:flex-row md:items-start md:gap-8 md:px-8 lg:gap-20 lg:px-10">
       {cart.length !== 0 && (
         <ul
           ref={animationParent}

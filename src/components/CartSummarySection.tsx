@@ -36,7 +36,7 @@ function CartSummarySection() {
   };
 
   return (
-    <div className="top-24 h-fit w-[350px] shrink-0 rounded-lg border p-6 shadow-sm md:sticky md:w-80 lg:w-[350px]">
+    <div className="top-24 h-fit w-[350px] max-w-full shrink-0 rounded-lg border p-6 shadow-sm md:sticky md:w-80 lg:w-[350px]">
       <h2 className="text-xl font-medium">Cart Summary</h2>
       <div className="mt-10 flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -52,7 +52,7 @@ function CartSummarySection() {
 
         {isCouponApplied && (
           <div className="flex items-center justify-between">
-            <span>Coupon</span>
+            <span>Coupon (10%) </span>
             <span className="text-green-500">
               {formatePriceForCurrency(-couponDiscount)}
             </span>

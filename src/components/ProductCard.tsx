@@ -68,8 +68,8 @@ function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <div className="flex w-[300px] flex-col gap-4 overflow-hidden rounded-lg shadow-xl">
-      <div className="relative flex h-[300px] items-center justify-center overflow-hidden">
+    <div className="flex w-[300px] max-w-full flex-col gap-4 overflow-hidden rounded-lg border-t-[0.5px] shadow-xl md:w-[250px] lg:w-[300px]">
+      <div className="relative flex h-[300px] items-center justify-center overflow-hidden md:h-[250px] lg:h-[300px]">
         <Image
           src={product.thumbnail}
           alt={product.name}

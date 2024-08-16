@@ -4,23 +4,22 @@ import { FiShoppingCart as CartIcon } from "react-icons/fi";
 import { IoIosSearch as SearchIcon } from "react-icons/io";
 import { LuMountain } from "react-icons/lu";
 import { getCart } from "~/server/api/cart";
-import { getServerAuthSession } from "~/server/auth";
 import HeaderCartLink from "./HeaderCartLink";
 import UserInfo from "./UserInfo";
 import { type User } from "~/types";
 
 function Header({ user }: { user: User | null }) {
   return (
-    <header className="item-center sticky top-0 z-10 flex w-full justify-between border-b border-gray-300 bg-white px-6 py-4 md:px-8 lg:px-10">
+    <header className="item-center sticky top-0 z-10 flex w-full justify-between border-b border-gray-300 bg-white px-4 py-4 md:px-8 lg:px-10">
       <div className="m-auto flex w-full max-w-screen-2xl items-center justify-between gap-5">
         <Link
           href={"/"}
           className="flex shrink-0 items-center gap-2 text-lg font-bold"
         >
           <LuMountain size={24} />
-          <span className="hidden md:block">Quik Shop</span>
+          <span className="hidden sm:block">Quik Shop</span>
         </Link>
-        <div className="relative max-w-md flex-1">
+        <div className="xs:block relative hidden max-w-md flex-1">
           <SearchIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-500" />
           <input
             type="search"
@@ -29,9 +28,16 @@ function Header({ user }: { user: User | null }) {
           />
         </div>
         <div className="flex items-center gap-4">
-          <Suspense fallback={<div>Loading..</div>}>
-            <UserInfoContainer />
-          </Suspense>
+          {user ? (
+            <UserInfo user={user} />
+          ) : (
+            <Link
+              className="text-base font-medium hover:underline"
+              href={"/api/auth/signin"}
+            >
+              Login
+            </Link>
+          )}
           <Suspense
             fallback={
               <Link className="relative px-2 py-1" href={"/cart"}>
@@ -46,23 +52,6 @@ function Header({ user }: { user: User | null }) {
       </div>
     </header>
   );
-}
-
-async function UserInfoContainer() {
-  const session = await getServerAuthSession();
-
-  if (!session) {
-    return (
-      <Link
-        className="text-base font-medium hover:underline"
-        href={"/api/auth/signin"}
-      >
-        Login
-      </Link>
-    );
-  }
-
-  return <UserInfo user={session.user} />;
 }
 
 async function CartLink({ user }: { user: User | null }) {
