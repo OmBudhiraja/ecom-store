@@ -51,7 +51,7 @@ function CartItem({
           onClick={() =>
             handleQuantityChange(cartItem.productId, cartItem.quantity - 1)
           }
-          className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white text-sm outline-offset-4 outline-zinc-900 transition-colors hover:bg-zinc-100 focus:bg-zinc-100 disabled:cursor-not-allowed"
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white text-sm outline-offset-4 outline-zinc-900 transition-colors hover:bg-zinc-100 active:bg-zinc-100 disabled:cursor-not-allowed"
         >
           <SubtractIcon />
         </button>
@@ -60,7 +60,7 @@ function CartItem({
           onClick={() =>
             handleQuantityChange(cartItem.productId, cartItem.quantity + 1)
           }
-          className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white text-sm outline-offset-4 outline-zinc-900 transition-colors hover:bg-zinc-100 focus:bg-zinc-100 disabled:cursor-not-allowed"
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white text-sm outline-offset-4 outline-zinc-900 transition-colors hover:bg-zinc-100 active:bg-zinc-100 disabled:cursor-not-allowed"
         >
           <AddIcon />
         </button>

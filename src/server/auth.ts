@@ -49,9 +49,13 @@ export const authOptions: NextAuthOptions = {
   },
 
   adapter: DrizzleAdapter(db, {
+    // @ts-expect-error type mismatch
     usersTable: users,
+    // @ts-expect-error type mismatch
     accountsTable: accounts,
+    // @ts-expect-error type mismatch
     sessionsTable: sessions,
+    // @ts-expect-error type mismatch
     verificationTokensTable: verificationTokens,
   }) as Adapter,
   providers: [

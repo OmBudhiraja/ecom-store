@@ -5,7 +5,7 @@ import { useCartStore } from "~/lib/cartStore";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CartPageSkeleton from "./skeleton";
 import { useUserStore } from "~/lib/userStore";
-import { removeFromCart } from "~/server/api/cart";
+import { removeFromCart, updateQuantity } from "~/server/api/cart";
 
 export default function CartPage() {
   const user = useUserStore((state) => state.user);
@@ -16,18 +16,20 @@ export default function CartPage() {
 
   const [animationParent] = useAutoAnimate();
 
-  function handleQuantityChange(productId: string, quantity: number) {
-    changeQuantity(productId, quantity);
+  async function handleQuantityChange(productId: string, quantity: number) {
+    changeQuantity(productId, quantity, !user);
+
+    if (user) {
+      await updateQuantity(productId, quantity);
+    }
   }
 
   async function handleRemoveProduct(productId: string) {
-    if (!user) {
-      removeItem(productId, true);
-      return;
-    }
+    removeItem(productId, !user);
 
-    removeItem(productId);
-    await removeFromCart(productId);
+    if (user) {
+      await removeFromCart(productId);
+    }
   }
 
   if (!cart) {

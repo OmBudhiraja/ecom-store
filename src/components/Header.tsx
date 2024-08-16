@@ -67,6 +67,10 @@ async function UserInfo() {
 async function CartLink({ user }: { user: Session["user"] | null }) {
   const cartRes = await getCart();
 
+  if (!cartRes.success) {
+    return <HeaderCartLink cart={null} user={user} />;
+  }
+
   return <HeaderCartLink cart={cartRes.cart ?? null} user={user} />;
 }
 

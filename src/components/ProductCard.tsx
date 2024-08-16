@@ -20,7 +20,6 @@ function ProductCard({ product }: ProductCardProps) {
   const [isPending, startTransition] = useTransition();
   const [showTransition, setShowTransition] = useState(false);
 
-  const setCart = useCartStore((state) => state.setCart);
   const addItem = useCartStore((state) => state.addItem);
 
   const user = useUserStore((state) => state.user);
@@ -42,17 +41,23 @@ function ProductCard({ product }: ProductCardProps) {
 
       setShowTransition(true);
       setTimeout(() => setShowTransition(false), 1500);
-
       return;
     }
 
     startTransition(async () => {
       const res = await addToCart([{ productId: product.id, quantity: 1 }]);
 
-      if (!res.success || !res.cart) {
+      if (!res.success) {
         toast.error(res.message ?? "Something went wrong!");
       } else {
-        setCart(res.cart);
+        addItem({
+          name: product.name,
+          productId: product.id,
+          quantity: 1,
+          originalPrice: product.originalPrice,
+          discountedPrice: product.discountedPrice,
+          thumbnail: product.thumbnail,
+        });
       }
 
       toast.success("Added to cart");
